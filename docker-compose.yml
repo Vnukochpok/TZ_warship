@@ -1,0 +1,25 @@
+services:
+  db:
+    image: postgres:13
+    container_name: warship_db
+    environment:
+      POSTGRES_USER: andrey
+      POSTGRES_PASSWORD: 123123
+      POSTGRES_DB: warship_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+
+  api:
+    build: .
+    container_name: warship_api
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    environment:
+      DATABASE_URL: postgresql+asyncpg://andrey:123123@db:5432/warship_db
+
+volumes:
+  postgres_data:
